@@ -45,7 +45,7 @@ const Text = styled.div`
 	font-weight: bold;
 `;
 const MainHold = styled.div`
-	margin-top: 13px;
+	margin-top: 17px;
 	display: flex;
 
 	align-items: center;

@@ -20,7 +20,19 @@ const SideBar = () => {
 	return (
 		<div style={{ display: "flex" }}>
 			<Container>
-				<span> Logo</span>
+				<span
+					style={{
+						fontSize: "13px",
+						display: "flex",
+						justifyContent: "center",
+						alignItems: "center",
+						color: "white",
+						fontWeight: "bold",
+						marginTop: "10px",
+					}}>
+					{" "}
+					Simple
+				</span>
 				<TwoComp>
 					<FirstHold>
 						<MainComp>
