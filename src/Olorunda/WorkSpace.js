@@ -4,24 +4,9 @@ import { FiActivity } from "react-icons/fi";
 import { BiTask } from "react-icons/bi";
 import { FaTasks } from "react-icons/fa";
 import pic from "../img/2.svg";
-const WorkSpace = () => {
+const ActivityPage = () => {
 	return (
 		<Container>
-			<ButtonHolder>
-				<ButtonHold1>
-					{" "}
-					<span>
-						<FiActivity />
-					</span>
-					Activity
-				</ButtonHold1>
-				<ButtonHold>
-					<span>
-						<FaTasks />
-					</span>
-					MyTask
-				</ButtonHold>
-			</ButtonHolder>
 			<ActiveText>
 				{" "}
 				<span>
@@ -39,7 +24,7 @@ const WorkSpace = () => {
 	);
 };
 
-export default WorkSpace;
+export default ActivityPage;
 
 const ContentHold = styled.div`
 	min-height: calc(100vh - 210px);

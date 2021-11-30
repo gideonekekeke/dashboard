@@ -3,39 +3,106 @@ import styled from "styled-components";
 import { AiFillFolderOpen } from "react-icons/ai";
 import { FaTasks } from "react-icons/fa";
 import { FaRegCalendarAlt } from "react-icons/fa";
-const SideBarToogle = ({ showHome, showAbout }) => {
+import { BsPeopleFill } from "react-icons/bs";
+import { MdSettingsInputComponent } from "react-icons/md";
+import { MdNotifications } from "react-icons/md";
+import { NavLink } from "react-router-dom";
+import { FiActivity } from "react-icons/fi";
+const SideBarToogle = ({
+	showHome,
+	showProject,
+	showUsers,
+	showSettings,
+	showNotification,
+}) => {
 	return (
 		<div>
-			{showHome && (
-				<SecondComp>
+			<SecondComp>
+				{showHome && (
 					<TextHold>
 						<Text>Home</Text>
-						<MainHold>
+						<MainHold to='/'>
 							<span>
-								<AiFillFolderOpen />
+								<FiActivity />
 							</span>
-							WorkSpace
+							Activity
 						</MainHold>
-						<MainHold>
+						<MainHold to='/'>
 							<span>
 								<FaTasks />
 							</span>
 							MyTask
 						</MainHold>
-						<MainHold>
+					</TextHold>
+				)}
+				{showProject && (
+					<TextHold>
+						<Text>WorkSpace</Text>
+						<MainHolding>
 							<span>
-								<FaRegCalendarAlt />
+								{" "}
+								Empty Project list, Click the Button below to get started
 							</span>
-							Calendar
+						</MainHolding>
+						<ButHold to='/project'>
+							<span>
+								<ButtonHold>Create Project</ButtonHold>
+							</span>
+						</ButHold>
+					</TextHold>
+				)}
+
+				{showUsers && (
+					<TextHold>
+						<Text>Users</Text>
+						<MainHold to='/'>
+							<span>
+								<BsPeopleFill />
+							</span>
+							All Users
 						</MainHold>
 					</TextHold>
-				</SecondComp>
-			)}
+				)}
+				{showSettings && (
+					<TextHold>
+						<Text>Settings</Text>
+						<MainHold to='/'>
+							<span>
+								<MdSettingsInputComponent />
+							</span>
+							General Settings
+						</MainHold>
+					</TextHold>
+				)}
+				{showNotification && (
+					<TextHold>
+						<Text>Notification</Text>
+						<MainHold to='/'>
+							<span>
+								<MdNotifications />
+							</span>
+							All Notification
+						</MainHold>
+					</TextHold>
+				)}
+			</SecondComp>
 		</div>
 	);
 };
 
 export default SideBarToogle;
+
+const ButtonHold = styled.div`
+	width: 150px;
+	height: 40px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: #377dff;
+	color: white;
+	border-radius: 5px;
+	font-weight: bold;
+`;
 
 const TextHold = styled.div`
 	margin-left: 20px;
@@ -43,14 +110,19 @@ const TextHold = styled.div`
 `;
 const Text = styled.div`
 	font-weight: bold;
+	font-family: Fredoka One, cursive;
+	margin-bottom: 10px;
+	color: gray;
 `;
-const MainHold = styled.div`
-	margin-top: 17px;
+const ButHold = styled(NavLink)`
 	display: flex;
-
+	color: gray;
 	align-items: center;
-	padding: 10px 0px;
-	font-weight: bold;
+	justify-content: center;
+
+	text-decoration: none;
+
+	/* font-weight: bold; */
 
 	:hover {
 		background: rgba(225, 225, 225, 0.7);
@@ -61,6 +133,89 @@ const MainHold = styled.div`
 
 	span {
 		margin-right: 10px;
+		margin-top: 10px;
+		font-size: 13px;
+	}
+`;
+const MainHolding = styled.div`
+	display: flex;
+	color: gray;
+	align-items: center;
+
+	/* font-weight: bold; */
+
+	:hover {
+		background: rgba(225, 225, 225, 0.7);
+		cursor: pointer;
+		transition: all 350ms;
+		border-radius: 5px;
+	}
+
+	span {
+		margin-right: 10px;
+		margin-top: 10px;
+		font-size: 13px;
+	}
+`;
+const MainHold = styled(NavLink)`
+	display: flex;
+	color: gray;
+	align-items: center;
+	padding: 5px 10px;
+	text-decoration: none;
+
+	/* font-weight: bold; */
+
+	:hover {
+		background: #dbeaff;
+		cursor: pointer;
+		transition: all 350ms;
+		border-radius: 5px;
+		color: #377dff;
+	}
+
+	span {
+		margin-right: 10px;
+		margin-top: 10px;
+	}
+`;
+const MainHold1 = styled.div`
+	display: flex;
+	color: gray;
+	align-items: center;
+	margin-left: 25px;
+	/* font-weight: bold; */
+
+	:hover {
+		background: #dbeaff;
+		cursor: pointer;
+		transition: all 350ms;
+		border-radius: 5px;
+		color: #377dff;
+	}
+
+	span {
+		margin-right: 10px;
+		margin-top: 10px;
+	}
+`;
+const MainHold2 = styled.div`
+	display: flex;
+	color: gray;
+	align-items: center;
+
+	/* font-weight: bold; */
+
+	:hover {
+		background: rgba(225, 225, 225, 0.7);
+		cursor: pointer;
+		transition: all 350ms;
+		border-radius: 5px;
+	}
+
+	span {
+		margin-right: 10px;
+		margin-top: 10px;
 	}
 `;
 

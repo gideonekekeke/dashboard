@@ -6,15 +6,50 @@ import { IoIosStats } from "react-icons/io";
 import { MdNotifications } from "react-icons/md";
 import { BsPeopleFill } from "react-icons/bs";
 import { AiFillSetting } from "react-icons/ai";
+import { FaSuitcase } from "react-icons/fa";
+import { NavLink } from "react-router-dom";
+
 const SideBar = () => {
-	const [showHome, setShowHome] = React.useState(false);
-	const [showAbout, setShowAbout] = React.useState(false);
+	const [showHome, setShowHome] = React.useState(true);
+	const [showProject, setShowProject] = React.useState(false);
+	const [showUsers, setShowUsers] = React.useState(false);
+	const [showSettings, setShowSettings] = React.useState(false);
+	const [showNotification, setShowNotitcation] = React.useState(false);
 
 	const handleHome = () => {
-		setShowHome(!showHome);
+		setShowHome(true);
+		setShowProject(false);
+		setShowUsers(false);
+		setShowSettings(false);
+		setShowNotitcation(false);
 	};
-	const handleAbout = () => {
-		setShowAbout(!showAbout);
+	const handleProject = () => {
+		setShowProject(true);
+		setShowHome(false);
+		setShowUsers(false);
+		setShowSettings(false);
+		setShowNotitcation(false);
+	};
+	const handleUsers = () => {
+		setShowProject(false);
+		setShowHome(false);
+		setShowUsers(true);
+		setShowSettings(false);
+		setShowNotitcation(false);
+	};
+	const handleSetting = () => {
+		setShowProject(false);
+		setShowHome(false);
+		setShowUsers(false);
+		setShowSettings(true);
+		setShowNotitcation(false);
+	};
+	const handleNotification = () => {
+		setShowProject(false);
+		setShowHome(false);
+		setShowUsers(false);
+		setShowSettings(false);
+		setShowNotitcation(true);
 	};
 
 	return (
@@ -35,38 +70,44 @@ const SideBar = () => {
 				</span>
 				<TwoComp>
 					<FirstHold>
-						<MainComp>
-							<span onClick={handleHome}>
-								<IoIosHome />
+						<MainComp to='/'>
+							<span>
+								<IoIosHome onClick={handleHome} />
 							</span>
 						</MainComp>
-						<MainComp>
+						<MainComp to='/project'>
 							<span>
-								<IoIosStats />
+								<FaSuitcase onClick={handleProject} />
 							</span>
 						</MainComp>
-						<MainComp>
+						<MainComp to='/notification'>
 							<span>
-								<MdNotifications />
+								<MdNotifications onClick={handleNotification} />
 							</span>
 						</MainComp>
-						<MainComp>
+						<MainComp to='/users'>
 							<span>
-								<BsPeopleFill />
+								<BsPeopleFill onClick={handleUsers} />
 							</span>
 						</MainComp>
 					</FirstHold>
 
 					<SecondComp>
-						<MainComp>
+						<MainComp to='/settings'>
 							<span>
-								<AiFillSetting />
+								<AiFillSetting onClick={handleSetting} />
 							</span>
 						</MainComp>
 					</SecondComp>
 				</TwoComp>
 			</Container>
-			<SideBarToogle showAbout={showAbout} showHome={showHome} />
+			<SideBarToogle
+				showHome={showHome}
+				showProject={showProject}
+				showUsers={showUsers}
+				showSettings={showSettings}
+				showNotification={showNotification}
+			/>
 		</div>
 	);
 };
@@ -87,7 +128,7 @@ const SecondComp = styled.div`
 	padding-top: -20px;
 `;
 
-const MainComp = styled.div`
+const MainComp = styled(NavLink)`
 	margin-top: 5px;
 	cursor: pointer;
 	padding: 10px 10px;
@@ -96,6 +137,11 @@ const MainComp = styled.div`
 	align-items: center;
 	color: white;
 	transition: all 350ms;
+	text-decoration: none;
+
+	&.active {
+		background: rgba(225, 225, 225, 0.3);
+	}
 
 	:hover {
 		background: rgba(225, 225, 225, 0.3);
@@ -107,7 +153,7 @@ const MainComp = styled.div`
 `;
 
 const Container = styled.div`
-	height: 100vh;
+	height: 100%;
 	width: 50px;
 	background: #377dff;
 	top: 0;
@@ -117,6 +163,7 @@ const Container = styled.div`
 	position: absolute;
 	display: flex;
 	flex-direction: column;
+	position: fixed;
 `;
 
 const CompHold = styled.div``;

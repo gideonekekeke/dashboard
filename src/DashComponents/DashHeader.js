@@ -8,9 +8,9 @@ const DashHeader = () => {
 				<div></div>
 				<Holding>
 					<ButtonHold>New Projects</ButtonHold>
+					<ButtonHold>New Task</ButtonHold>
 					<ImageHold>
 						{" "}
-						<Userimage />
 						<Userimage />
 					</ImageHold>
 				</Holding>
@@ -32,7 +32,7 @@ const Holding = styled.div`
 	justify-content: center;
 	align-items: center;
 	justify-content: space-between;
-	width: 300px;
+	width: 400px;
 	cursor: pointer;
 `;
 const ButtonHold = styled.div`
