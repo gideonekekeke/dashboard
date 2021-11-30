@@ -14,13 +14,15 @@ function App() {
 			<Router>
 				<DashHeader />
 				<DashHolder />
-				<Routes>
-					<Route path='/' element={<ActivityPage />} />
-					<Route path='/project' element={<ProjectsFile />} />
-					<Route path='/notification' element={<NotificationPage />} />
-					<Route path='/users' element={<AllUsersPage />} />
-					<Route path='/settings' element={<SettingsPage />} />
-				</Routes>
+				<div style={{ marginLeft: "300px" }}>
+					<Routes>
+						<Route path='/' element={<ActivityPage />} />
+						<Route path='/project' element={<ProjectsFile />} />
+						<Route path='/notification' element={<NotificationPage />} />
+						<Route path='/users' element={<AllUsersPage />} />
+						<Route path='/settings' element={<SettingsPage />} />
+					</Routes>
+				</div>
 			</Router>
 		</>
 	);

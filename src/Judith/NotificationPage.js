@@ -5,9 +5,4 @@ const NotificationPage = () => {
 };
 
 export default NotificationPage;
-const Container = styled.div`
-	display: flex;
-	justify-content: center;
-
-	align-items: center;
-`;
+const Container = styled.div``;
