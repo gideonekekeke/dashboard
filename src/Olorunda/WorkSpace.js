@@ -54,7 +54,7 @@ const ActiveText = styled.div`
 	display: flex;
 	justify-content: flex-start;
 	width: 80%;
-	margin-left: 200px;
+
 	align-items: center;
 	margin-top: 10px;
 	font-size: 20px;

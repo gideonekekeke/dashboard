@@ -1,14 +1,14 @@
 import React from "react";
 import styled from "styled-components";
-
+import { NavLink } from "react-router-dom";
 const DashHeader = () => {
 	return (
 		<Container>
 			<ContentHold>
 				<div></div>
 				<Holding>
-					<ButtonHold>New Projects</ButtonHold>
-					<ButtonHold>New Task</ButtonHold>
+					<ButtonHold to='/proj'>New Projects</ButtonHold>
+					<ButtonHold to='/task'>New Task</ButtonHold>
 					<ImageHold>
 						{" "}
 						<Userimage />
@@ -35,7 +35,7 @@ const Holding = styled.div`
 	width: 400px;
 	cursor: pointer;
 `;
-const ButtonHold = styled.div`
+const ButtonHold = styled(NavLink)`
 	width: 150px;
 	height: 40px;
 	display: flex;
@@ -45,6 +45,7 @@ const ButtonHold = styled.div`
 	color: white;
 	border-radius: 5px;
 	font-weight: bold;
+	text-decoration: none;
 `;
 const Userimage = styled.div`
 	height: 40px;

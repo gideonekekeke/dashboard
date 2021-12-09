@@ -1,8 +1,11 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import DashHeader from "./DashComponents/DashHeader";
 import DashHolder from "./DashComponents/DashHolder";
+import CreateProjects from "./Gideon/CreateProjects";
+import CreateTask from "./Gideon/CreateTask";
 
 import ProjectsFile from "./Gideon/ProjectsFile";
+import TaskOverview from "./Gideon/TaskOverview";
 import AllUsersPage from "./GoodLuck/AllUsersPage";
 import NotificationPage from "./Judith/NotificationPage";
 import ActivityPage from "./Olorunda/WorkSpace";
@@ -21,6 +24,9 @@ function App() {
 						<Route path='/notification' element={<NotificationPage />} />
 						<Route path='/users' element={<AllUsersPage />} />
 						<Route path='/settings' element={<SettingsPage />} />
+						<Route path='/proj' element={<CreateProjects />} />
+						<Route path='/task' element={<CreateTask />} />
+						<Route path='/over' element={<TaskOverview />} />
 					</Routes>
 				</div>
 			</Router>

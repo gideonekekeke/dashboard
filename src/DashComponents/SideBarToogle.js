@@ -8,6 +8,8 @@ import { MdSettingsInputComponent } from "react-icons/md";
 import { MdNotifications } from "react-icons/md";
 import { NavLink } from "react-router-dom";
 import { FiActivity } from "react-icons/fi";
+import { FaGreaterThan } from "react-icons/fa";
+import { AiOutlineDown } from "react-icons/ai";
 const SideBarToogle = ({
 	showHome,
 	showProject,
@@ -15,6 +17,12 @@ const SideBarToogle = ({
 	showSettings,
 	showNotification,
 }) => {
+	const [togglePro, setTogglePro] = React.useState(false);
+
+	const handleTogglePro = () => {
+		setTogglePro(!togglePro);
+	};
+
 	return (
 		<div>
 			<SecondComp>
@@ -22,17 +30,33 @@ const SideBarToogle = ({
 					<TextHold>
 						<Text>Home</Text>
 						<MainHold to='/'>
-							<span>
-								<FiActivity />
-							</span>
-							Activity
+							<ButtonHold3>Create your workspace</ButtonHold3>
 						</MainHold>
+
 						<MainHold to='/'>
-							<span>
-								<FaTasks />
+							<span onClick={handleTogglePro}>
+								Growth Capital
+								{togglePro ? (
+									<AiOutlineDown
+										style={{
+											fontSize: "13px",
+											marginLeft: "10px",
+										}}
+									/>
+								) : (
+									<FaGreaterThan
+										style={{ fontSize: "10px", marginLeft: "10px" }}
+									/>
+								)}
 							</span>
-							MyTask
 						</MainHold>
+						{togglePro ? (
+							<>
+								{" "}
+								<ProHold>Shotkode project</ProHold>
+								<ProHold>Udeme Kitchen</ProHold>
+							</>
+						) : null}
 					</TextHold>
 				)}
 				{showProject && (
@@ -44,7 +68,7 @@ const SideBarToogle = ({
 								Empty Project list, Click the Button below to get started
 							</span>
 						</MainHolding>
-						<ButHold to='/project'>
+						<ButHold to='/proj'>
 							<span>
 								<ButtonHold>Create Project</ButtonHold>
 							</span>
@@ -92,6 +116,33 @@ const SideBarToogle = ({
 
 export default SideBarToogle;
 
+const ProHold = styled.div`
+	font-size: 12px;
+	margin-left: 30px;
+	font-weight: bold;
+	padding: 5px 10px;
+
+	:hover {
+		background: rgba(225, 225, 225, 0.7);
+		cursor: pointer;
+		transition: all 350ms;
+		border-radius: 5px;
+	}
+`;
+
+const ButtonHold3 = styled.div`
+	width: 150px;
+	height: 40px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: #377dff;
+	color: white;
+	border-radius: 5px;
+	font-weight: bold;
+	font-size: 10px;
+`;
+
 const ButtonHold = styled.div`
 	width: 150px;
 	height: 40px;
@@ -107,6 +158,14 @@ const ButtonHold = styled.div`
 const TextHold = styled.div`
 	margin-left: 20px;
 	margin-top: 10px;
+
+	p {
+		font-size: 12px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 80%;
+	}
 `;
 const Text = styled.div`
 	font-weight: bold;
