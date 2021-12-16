@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { app } from "../Base";
 import { AuthContext } from "../Global/AuthContext";
@@ -42,7 +42,9 @@ const ExploreTask = () => {
 					<Title>{props.title}</Title>
 					{props.userID === currentUser.uid ? (
 						<div>
-							<button>Create Steps</button>
+							<Link to={`/steps/${props.id}`}>
+								<button>Create Steps</button>
+							</Link>
 						</div>
 					) : null}
 				</Card>

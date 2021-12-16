@@ -97,6 +97,7 @@ function App() {
 								</PrivateRoute>
 							}
 						/>
+
 						<Route
 							path='/settings'
 							element={
@@ -122,7 +123,7 @@ function App() {
 							}
 						/>
 						<Route
-							path='/over'
+							path='/steps/:id'
 							element={
 								<PrivateRoute>
 									<TaskOverview />
