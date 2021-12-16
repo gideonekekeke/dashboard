@@ -23,12 +23,9 @@ const SideBarToogle = ({
 	showUsers,
 	showSettings,
 	showNotification,
+	handleProject,
 }) => {
 	const [togglePro, setTogglePro] = React.useState(false);
-
-	const handleTogglePro = () => {
-		setTogglePro(!togglePro);
-	};
 
 	const dispatch = useDispatch();
 
@@ -67,6 +64,10 @@ const SideBarToogle = ({
 			});
 	};
 
+	const handleTogglePro = () => {
+		setTogglePro(!togglePro);
+	};
+
 	React.useEffect(() => {
 		getWorkSpace();
 		console.log("dgrfhj", workSpaceData);
@@ -90,7 +91,9 @@ const SideBarToogle = ({
 									return el.staff === currentUser.uid;
 								}) ? (
 									<div>
-										<MainHold to={`/project/${props.id}`}>
+										<MainHold
+											onClick={handleProject}
+											to={`/project/${props.id}`}>
 											<span
 												onClick={() => {
 													handleTogglePro();
@@ -308,7 +311,7 @@ const MainHolding = styled.div`
 		font-size: 13px;
 	}
 `;
-const MainHold = styled(NavLink)`
+const MainHold = styled(Link)`
 	display: flex;
 	color: gray;
 	align-items: center;

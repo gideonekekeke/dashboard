@@ -73,32 +73,32 @@ const SideBar = () => {
 				</span>
 				<TwoComp>
 					<FirstHold>
-						<MainComp to='/'>
+						<MainComp onClick={handleHome} to='/'>
 							<span>
-								<IoIosHome onClick={handleHome} />
+								<IoIosHome />
 							</span>
 						</MainComp>
-						<MainComp to={`/project/${getWorkId}`}>
+						<MainComp onClick={handleProject} to={`/project/${getWorkId}`}>
 							<span>
-								<FaSuitcase onClick={handleProject} />
+								<FaSuitcase />
 							</span>
 						</MainComp>
-						<MainComp to='/notification'>
+						<MainComp onClick={handleNotification} to='/notification'>
 							<span>
-								<MdNotifications onClick={handleNotification} />
+								<MdNotifications />
 							</span>
 						</MainComp>
-						<MainComp to='/users'>
+						<MainComp onClick={handleUsers} to='/users'>
 							<span>
-								<BsPeopleFill onClick={handleUsers} />
+								<BsPeopleFill />
 							</span>
 						</MainComp>
 					</FirstHold>
 
 					<SecondComp>
-						<MainComp to='/settings'>
+						<MainComp onClick={handleSetting} to='/settings'>
 							<span>
-								<AiFillSetting onClick={handleSetting} />
+								<AiFillSetting />
 							</span>
 						</MainComp>
 					</SecondComp>
@@ -110,6 +110,7 @@ const SideBar = () => {
 				showUsers={showUsers}
 				showSettings={showSettings}
 				showNotification={showNotification}
+				handleProject={handleProject}
 			/>
 		</div>
 	);
