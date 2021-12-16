@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 import { FaFolderPlus } from "react-icons/fa";
@@ -6,7 +6,37 @@ import { ImCancelCircle } from "react-icons/im";
 import { RiFolder2Fill } from "react-icons/ri";
 import { MdOutlineLowPriority } from "react-icons/md";
 import { BsHourglassTop } from "react-icons/bs";
+import { app } from "../Base";
+import { AuthContext } from "../Global/AuthContext";
+import { useParams, useNavigate } from "react-router-dom";
 const CreateProjects = () => {
+	const { currentUser } = useContext(AuthContext);
+
+	const navigate = useNavigate();
+
+	const { id } = useParams();
+	const [ProjectName, setProjectName] = React.useState("");
+	const [priority, setPriority] = React.useState("");
+	const [deadline, setDeadline] = React.useState("");
+
+	const uploadProject = async () => {
+		await app
+			.firestore()
+			.collection("workspace")
+			.doc(id)
+			.collection("project")
+			.doc()
+			.set({
+				ProjectName,
+				priority,
+				deadline,
+
+				createdBy: currentUser?.uid,
+			});
+
+		navigate("/");
+	};
+
 	return (
 		<Container>
 			<Card>
@@ -27,7 +57,12 @@ const CreateProjects = () => {
 						<MainText>Project Name</MainText>
 					</MainHold>
 					<InputHold>
-						<input placeholder='Give a name of your projet eg agile project' />
+						<input
+							onChange={(e) => {
+								setProjectName(e.target.value);
+							}}
+							placeholder='Give a name of your projet eg agile project'
+						/>
 					</InputHold>
 				</InputContainer>
 				<InputContainer1>
@@ -39,10 +74,13 @@ const CreateProjects = () => {
 							<MainText>Set Priority</MainText>
 						</MainHold>
 						<InputHold1>
-							<select>
-								<option>Urgent</option>
-								<option>high</option>
-								<option>Low</option>
+							<select
+								onChange={(e) => {
+									setPriority(e.target.value);
+								}}>
+								<option value='urgent'>Urgent</option>
+								<option value='high'>high</option>
+								<option value='low'>Low</option>
 							</select>
 						</InputHold1>
 					</TwoHold>
@@ -55,13 +93,21 @@ const CreateProjects = () => {
 						</MainHold>
 						<InputHold2>
 							<input
+								onChange={(e) => {
+									setDeadline(e.target.value);
+								}}
 								type='date'
 								placeholder='Give a name of your projet eg agile project'
 							/>
 						</InputHold2>
 					</TwoHold2>
 				</InputContainer1>
-				<ButtonHold>Create Project</ButtonHold>
+				<ButtonHold
+					onClick={() => {
+						uploadProject();
+					}}>
+					Create Project
+				</ButtonHold>
 			</Card>
 		</Container>
 	);

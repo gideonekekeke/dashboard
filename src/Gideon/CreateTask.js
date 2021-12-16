@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
 import { FaTasks } from "react-icons/fa";
@@ -10,17 +10,90 @@ import { MdDescription } from "react-icons/md";
 import { BsHourglassTop } from "react-icons/bs";
 import "./CalenderStyle.css";
 import { DateRangePickerComponent } from "@syncfusion/ej2-react-calendars";
+import { app } from "../Base";
+import { useParams, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { AuthContext } from "../Global/AuthContext";
+
+import TeamMembers from "./TeamMembers";
+import { ViewProjectID } from "../Global/ReduxState";
 const CreateTask = () => {
-	const startValue = new Date(
-		new Date().getFullYear(),
-		new Date().getMonth(),
-		14,
-	);
-	const EndValue = new Date(
-		new Date().getFullYear(),
-		new Date().getMonth(),
-		14,
-	);
+	const { id } = useParams();
+	const dispatch = useDispatch();
+
+	const navigate = useNavigate();
+
+	const { currentUser, currentData } = useContext(AuthContext);
+
+	const [dateValue, setDateValue] = React.useState("");
+	const [title, setTitle] = React.useState("");
+	const [userID, setUserID] = React.useState("");
+	const [description, setDescription] = React.useState("");
+
+	const wrkID = useSelector((state) => state.persistedReducer.sideBarID);
+	dispatch(ViewProjectID(id));
+
+	const [data, setData] = React.useState([]);
+	const [workdata, setWorkData] = React.useState([]);
+	const [workdatas, setWorkDatas] = React.useState([]);
+
+	const getData = async () => {
+		await app
+			.firestore()
+			.collection("workspace")
+			.doc(wrkID)
+			.collection("project")
+			.doc(id)
+			.get()
+			.then((doc) => {
+				setData(doc.data());
+			});
+	};
+
+	const getWorkDatas = async () => {
+		await app
+			.firestore()
+			.collection("workspace")
+			.onSnapshot((snapshot) => {
+				const r = [];
+				snapshot.forEach((doc) => {
+					r.push({ ...doc.data(), id: doc.id });
+				});
+				setWorkDatas(r);
+			});
+	};
+
+	const uploadTask = async () => {
+		await app
+			.firestore()
+			.collection("workspace")
+			.doc(wrkID)
+			.collection("project")
+			.doc(id)
+			.collection("task")
+			.doc()
+			.set({
+				title,
+				projectN: data?.ProjectName,
+				userID,
+				description,
+				dateValue,
+				createdBy: currentUser?.uid,
+			});
+		setUserID("");
+		setDateValue("");
+		setTitle("");
+		setDescription("");
+		navigate("/");
+	};
+
+	React.useEffect(() => {
+		getData();
+
+		getWorkDatas();
+		console.log("this is the main data", data);
+	}, [wrkID, id]);
+
 	return (
 		<Container>
 			<Card>
@@ -41,7 +114,12 @@ const CreateTask = () => {
 						</span>
 						<TextIcon>title</TextIcon>
 					</Holder>
-					<input placeholder='Give a title to your projet eg agile project' />
+					<input
+						onChange={(e) => {
+							setTitle(e.target.value);
+						}}
+						placeholder='add your project title '
+					/>
 				</ContentHold>
 				<ContentHold1>
 					<Holder>
@@ -50,7 +128,11 @@ const CreateTask = () => {
 						</span>
 						<TextIcon>Project</TextIcon>
 					</Holder>
-					<input placeholder='add your project' />
+					<input
+						disabled={true}
+						placeholder={data?.ProjectName}
+						value={data?.ProjectName}
+					/>
 				</ContentHold1>
 				<ContentHold1>
 					<Holder>
@@ -60,9 +142,13 @@ const CreateTask = () => {
 						<TextIcon>users</TextIcon>
 					</Holder>
 					<MainHold>
-						{" "}
-						<ButtonHold bg='#091e42'>Assign users</ButtonHold>
-						<ButtonHold bg='silver'>No users assigned</ButtonHold>
+						<input
+							onChange={(e) => {
+								setUserID(e.target.value);
+							}}
+							maxlength='28'
+							placeholder='place a team secret id (copy secret id below)'
+						/>
 					</MainHold>
 				</ContentHold1>
 				<ContentHold2>
@@ -73,16 +159,25 @@ const CreateTask = () => {
 						<TextIcon>Description</TextIcon>
 					</Holder>
 					<AreaHold>
-						<textarea placeholder='Give a good description about the project/task you are creating' />
+						<textarea
+							onChange={(e) => {
+								setDescription(e.target.value);
+							}}
+							placeholder='Give a good description about the project/task you are creating'
+						/>
 						<AllButton>
 							<PriorHold>
 								<span>priority</span>
-								<ButtonHold1 bg='#ff6600'>Normal</ButtonHold1>
+								<ButtonHold1 bg='#ff6600'>{data?.priority}</ButtonHold1>
 							</PriorHold>
 							<PriorHold>
 								<span>Start date - Due date</span>
 								<BookingBox>
 									<DateRangePickerComponent
+										value={dateValue}
+										onChange={(e) => {
+											setDateValue(e.target.value);
+										}}
 										style={{
 											width: "200px",
 											display: "flex",
@@ -93,8 +188,6 @@ const CreateTask = () => {
 											color: "white",
 										}}
 										placeholder='Enter Date Range'
-										startDate={startValue}
-										endDate={EndValue}
 										// minDays={10}
 										// maxDays={10}
 										format='dd-MMM-yy'></DateRangePickerComponent>
@@ -107,19 +200,78 @@ const CreateTask = () => {
 									<span style={{ marginTop: "5px", marginRight: "5px" }}>
 										<BsHourglassTop />
 									</span>
-									Dec 23
+									{data?.deadline}
 								</ButtonHold1>
 							</PriorHold>
 						</AllButton>
 					</AreaHold>
 				</ContentHold2>
-				<ButtonHold3 bg='#091e42'>Create Tasks</ButtonHold3>
+				<TeamHold>
+					<p>Here are your Team memebers.</p>
+					<span>
+						Click on the button to copy a team secret id, and paste it on user
+						the input{" "}
+					</span>
+					{workdatas.map((props) => (
+						<div>
+							{props.id === wrkID ? (
+								<div>
+									{currentUser.uid === props.createdBy ? (
+										<div>
+											{" "}
+											<div
+												style={{
+													display: "flex",
+													minWidth: "450px",
+													justifyContent: "space-between",
+													alignItems: "center",
+												}}>
+												{props.myTeam.map((props) => (
+													<div>
+														<TeamMembers id={props.staff} />
+													</div>
+												))}
+											</div>
+										</div>
+									) : null}
+								</div>
+							) : null}
+						</div>
+					))}
+
+					<ButtonHold3
+						onClick={() => {
+							uploadTask();
+						}}
+						bg='#091e42'>
+						Create Task
+					</ButtonHold3>
+				</TeamHold>
 			</Card>
 		</Container>
 	);
 };
 
 export default CreateTask;
+
+const TeamHold = styled.div`
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+
+	p {
+		font-size: 13px;
+		font-weight: bold;
+	}
+
+	span {
+		font-weight: bold;
+	}
+`;
+
+// <ButtonHold bg='#091e42'>Assign users</ButtonHold>
+// <ButtonHold bg='silver'>No users assigned</ButtonHold>
 
 const BookingFormat = styled.div`
 	font-size: 12px;
@@ -255,8 +407,8 @@ const ButtonHold = styled.div`
 	cursor: pointer;
 	margin-left: 40px;
 `;
-const ButtonHold3 = styled.div`
-	width: 250px;
+const ButtonHold3 = styled.button`
+	width: 300px;
 	height: 50px;
 	display: flex;
 	justify-content: center;
@@ -265,11 +417,12 @@ const ButtonHold3 = styled.div`
 	color: white;
 	border-radius: 5px;
 	font-weight: bold;
+	text-decoration: none;
+	font-size: 15px;
 
 	cursor: pointer;
 
-	margin-top: 20px;
-	margin-right: 50px;
+	margin-top: 30px;
 `;
 
 const TwoHold = styled.div`
@@ -344,6 +497,18 @@ const InputHold = styled.div`
 `;
 const MainHold = styled.div`
 	display: flex;
+
+	select {
+		margin-left: 45px;
+		width: 420px;
+		height: 50px;
+		cursor: pointer;
+	}
+
+	input {
+		margin-left: 43px;
+		width: 400px;
+	}
 `;
 
 const CancelHold = styled(NavLink)`

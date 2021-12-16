@@ -1,19 +1,17 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
+import { AuthContext } from "../Global/AuthContext";
 const DashHeader = () => {
+	const { currentData } = useContext(AuthContext);
 	return (
 		<Container>
 			<ContentHold>
-				<div></div>
-				<Holding>
-					<ButtonHold to='/proj'>New Projects</ButtonHold>
-					<ButtonHold to='/task'>New Task</ButtonHold>
-					<ImageHold>
-						{" "}
-						<Userimage />
-					</ImageHold>
-				</Holding>
+				<div>defghjk</div>
+
+				<ImageHold>
+					<Userimage src={currentData?.img} />
+				</ImageHold>
 			</ContentHold>
 		</Container>
 	);
@@ -47,12 +45,16 @@ const ButtonHold = styled(NavLink)`
 	font-weight: bold;
 	text-decoration: none;
 `;
-const Userimage = styled.div`
-	height: 40px;
-	width: 40px;
+const Userimage = styled.img`
+	height: 45px;
+	width: 45px;
 	background: silver;
 	border-radius: 50%;
 	margin-left: 10px;
+	object-fit: cover;
+	display: flex;
+	justify-content: flex-end;
+	border: 2px solid #377dff;
 `;
 
 const Container = styled.div`
@@ -60,7 +62,7 @@ const Container = styled.div`
 	background: rgba(225, 225, 225, 0.5);
 	width: 100%;
 	display: flex;
-	justify-content: space-between;
+	// justify-content: space-between;
 	align-items: center;
 `;
 
@@ -68,6 +70,5 @@ const ContentHold = styled.div`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	width: 100%;
-	margin-right: 50px;
+	width: 95%;
 `;

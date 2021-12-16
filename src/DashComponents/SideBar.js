@@ -7,7 +7,8 @@ import { MdNotifications } from "react-icons/md";
 import { BsPeopleFill } from "react-icons/bs";
 import { AiFillSetting } from "react-icons/ai";
 import { FaSuitcase } from "react-icons/fa";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const SideBar = () => {
 	const [showHome, setShowHome] = React.useState(true);
@@ -15,6 +16,8 @@ const SideBar = () => {
 	const [showUsers, setShowUsers] = React.useState(false);
 	const [showSettings, setShowSettings] = React.useState(false);
 	const [showNotification, setShowNotitcation] = React.useState(false);
+
+	const getWorkId = useSelector((state) => state.persistedReducer.sideBarID);
 
 	const handleHome = () => {
 		setShowHome(true);
@@ -75,7 +78,7 @@ const SideBar = () => {
 								<IoIosHome onClick={handleHome} />
 							</span>
 						</MainComp>
-						<MainComp to='/project'>
+						<MainComp to={`/project/${getWorkId}`}>
 							<span>
 								<FaSuitcase onClick={handleProject} />
 							</span>
@@ -128,7 +131,7 @@ const SecondComp = styled.div`
 	padding-top: -20px;
 `;
 
-const MainComp = styled(NavLink)`
+const MainComp = styled(Link)`
 	margin-top: 5px;
 	cursor: pointer;
 	padding: 10px 10px;

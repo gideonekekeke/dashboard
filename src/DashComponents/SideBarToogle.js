@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import { AiFillFolderOpen } from "react-icons/ai";
 import { FaTasks } from "react-icons/fa";
@@ -6,10 +6,17 @@ import { FaRegCalendarAlt } from "react-icons/fa";
 import { BsPeopleFill } from "react-icons/bs";
 import { MdSettingsInputComponent } from "react-icons/md";
 import { MdNotifications } from "react-icons/md";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { FiActivity } from "react-icons/fi";
 import { FaGreaterThan } from "react-icons/fa";
+import { BsBriefcaseFill } from "react-icons/bs";
 import { AiOutlineDown } from "react-icons/ai";
+import { app } from "../Base";
+import { AuthContext } from "../Global/AuthContext";
+import SideBarProject from "../Gideon/SideBarProject";
+import { useDispatch, useSelector } from "react-redux";
+import { ViewWorkSpace } from "../Global/ReduxState";
+
 const SideBarToogle = ({
 	showHome,
 	showProject,
@@ -23,56 +30,118 @@ const SideBarToogle = ({
 		setTogglePro(!togglePro);
 	};
 
+	const dispatch = useDispatch();
+
+	const spaceID = useSelector((state) => state.persistedReducer.sideBarID);
+
+	const { currentUser } = useContext(AuthContext);
+
+	const [workSpaceData, setWorkSpaceData] = React.useState([]);
+
+	const [getProjects, setGetProjects] = React.useState([]);
+
+	const getWorkSpace = async () => {
+		await app
+			.firestore()
+			.collection("workspace")
+			.onSnapshot((snap) => {
+				const item = [];
+				snap.forEach((doc) => {
+					item.push({ ...doc.data(), id: doc.id });
+				});
+				setWorkSpaceData(item);
+			});
+	};
+	const getTheProjects = async () => {
+		await app
+			.firestore()
+			.collection("workspace")
+			.doc(spaceID)
+			.collection("project")
+			.onSnapshot((snap) => {
+				const item = [];
+				snap.forEach((doc) => {
+					item.push({ ...doc.data(), id: doc.id });
+				});
+				setGetProjects(item);
+			});
+	};
+
+	React.useEffect(() => {
+		getWorkSpace();
+		console.log("dgrfhj", workSpaceData);
+		getTheProjects();
+	}, [spaceID]);
+
 	return (
 		<div>
 			<SecondComp>
 				{showHome && (
 					<TextHold>
 						<Text>Home</Text>
-						<MainHold to='/'>
+						<MainHold to='/workspace'>
 							<ButtonHold3>Create your workspace</ButtonHold3>
 						</MainHold>
 
-						<MainHold to='/'>
-							<span onClick={handleTogglePro}>
-								Growth Capital
-								{togglePro ? (
-									<AiOutlineDown
-										style={{
-											fontSize: "13px",
-											marginLeft: "10px",
-										}}
-									/>
-								) : (
-									<FaGreaterThan
-										style={{ fontSize: "10px", marginLeft: "10px" }}
-									/>
-								)}
-							</span>
-						</MainHold>
-						{togglePro ? (
-							<>
-								{" "}
-								<ProHold>Shotkode project</ProHold>
-								<ProHold>Udeme Kitchen</ProHold>
-							</>
-						) : null}
+						{workSpaceData?.map((props) => (
+							<div>
+								{currentUser?.uid === props?.createdBy ||
+								props.myTeam.find((el) => {
+									return el.staff === currentUser.uid;
+								}) ? (
+									<div>
+										<MainHold to={`/project/${props.id}`}>
+											<span
+												onClick={() => {
+													handleTogglePro();
+													dispatch(ViewWorkSpace(props.id));
+												}}>
+												{props.WorkName}
+												{togglePro ? (
+													<AiOutlineDown
+														style={{
+															fontSize: "13px",
+															marginLeft: "10px",
+														}}
+													/>
+												) : (
+													<FaGreaterThan
+														style={{ fontSize: "10px", marginLeft: "10px" }}
+													/>
+												)}
+											</span>
+										</MainHold>
+
+										{togglePro ? (
+											<div>
+												{currentUser.uid === props.createdBy ? (
+													<MainHold to={`/proj/${props.id}`}>
+														<ButtonHold4>Add a Project</ButtonHold4>
+													</MainHold>
+												) : null}
+												<SideBarProject id={props.id} />
+											</div>
+										) : null}
+									</div>
+								) : null}
+							</div>
+						))}
 					</TextHold>
 				)}
 				{showProject && (
 					<TextHold>
-						<Text>WorkSpace</Text>
-						<MainHolding>
-							<span>
-								{" "}
-								Empty Project list, Click the Button below to get started
-							</span>
-						</MainHolding>
-						<ButHold to='/proj'>
-							<span>
-								<ButtonHold>Create Project</ButtonHold>
-							</span>
-						</ButHold>
+						<Text>Projects</Text>
+
+						{getProjects &&
+							getProjects.map((props) => (
+								<ProHold to={`/exploreTask/${props.id}`}>
+									{" "}
+									<span>
+										<BsBriefcaseFill style={{ marginTop: "10px" }} />
+									</span>
+									{props.ProjectName}
+								</ProHold>
+							))}
 					</TextHold>
 				)}
 
@@ -116,23 +185,32 @@ const SideBarToogle = ({
 
 export default SideBarToogle;
 
-const ProHold = styled.div`
-	font-size: 12px;
-	margin-left: 30px;
+const ProHold = styled(Link)`
+	font-size: 15px;
+
 	font-weight: bold;
-	padding: 5px 10px;
+	padding: 3px 10px;
+	text-decoration: none;
+	display: flex;
+	align-items: center;
+	text-decoration: none;
+	color: black;
+	span {
+		margin-right: 10px;
+	}
 
 	:hover {
 		background: rgba(225, 225, 225, 0.7);
 		cursor: pointer;
 		transition: all 350ms;
 		border-radius: 5px;
+		color: #377dff;
 	}
 `;
 
-const ButtonHold3 = styled.div`
+const ButtonHold4 = styled.div`
 	width: 150px;
-	height: 40px;
+	height: 30px;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -140,7 +218,21 @@ const ButtonHold3 = styled.div`
 	color: white;
 	border-radius: 5px;
 	font-weight: bold;
-	font-size: 10px;
+	font-size: 12px;
+	cursor: pointer;
+	margin-left: 10px;
+`;
+const ButtonHold3 = styled.div`
+	width: 150px;
+	height: 45px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: #091e42;
+	color: white;
+	border-radius: 5px;
+	font-weight: bold;
+	font-size: 11px;
 `;
 
 const ButtonHold = styled.div`
